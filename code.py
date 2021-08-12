@@ -128,7 +128,7 @@ def predict_aqi(x,y,n):
     return answer
 
 #Import data
-filepath = '/Users/shubhayansrivastava/Documents/Python/Practice/Machine_Learning_Project/Air Quality Index Data.xlsx'
+filepath = 'Air Quality Index Data.xlsx'
 df = pd.read_excel(filepath, sheet_name=None)
 areas = df.keys()
 
