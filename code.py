@@ -145,8 +145,12 @@ for i in areas:
     x.to_numpy()
     for j in df[i].columns[3:]:
         y = df[i][j]
-        plt.figure()
-        plt.xlabel(i+'_'+j)
+        fig = plt.figure(figsize=(20,10))
+        fig.suptitle('Graph of '+i+' '+j+' values',fontsize=25)
+        plt.xlabel('Days', fontsize=20)
+        plt.ylabel('Value', fontsize=20)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
         plt.plot(x,y)
 
 #Checking how many parameters have all NaN values
@@ -601,13 +605,17 @@ for i in areas:
     pm2[i] = np.array(pm2[i])
 
 #Plotting the values of the subindexes and their respective hypothesis functions
-no_predict = predict_visualization(np.array(x), no['Bandra Kurla'])
-plt_y = no['Bandra Kurla']
-plt.figure(figsize=(20, 10))
-plt.plot(x, plt_y)
-plt.xlabel('days')
-plt.ylabel(f'')
-plt.plot(x, no_predict)
+so2_predict = predict_visualization(np.array(x), so2['Bandra Kurla'])
+plt_y = so2['Bandra Kurla']
+fig = plt.figure(figsize=(20, 10))
+plt.plot(x, plt_y, label='Actual Values')
+fig.suptitle('Model performance on Bandra Kurla '+'$SO_{2}$'+' values', fontsize=25)
+plt.xlabel('Day no.', fontsize=20)
+plt.ylabel('Value', fontsize=20)
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
+plt.plot(x, so2_predict, label='Hypothesis Function')
+plt.legend(prop={'size':21})
 
 for i in areas:
     for j in range(len(so2['Bandra'])):
@@ -622,15 +630,22 @@ for i in areas:
     X[i] = df[i]
     X[i] = X[i].iloc[:,3:]
 
+   
 ext = np.empty(236, dtype=object)
 error = np.empty(236, dtype=object)
 for i in range(0,236):
-    ext[i] = predict_aqi(X['Bandra'].to_numpy(),aqi['Bandra'],pd.DataFrame(X['Bandra'].iloc[i,:]).T.to_numpy())
-    error[i] = aqi['Bandra'][i] - ext[i]
-plt.figure(figsize=(20,10))
+    ext[i] = predict_aqi(X['Bandra Kurla'].to_numpy(),aqi['Bandra Kurla'],pd.DataFrame(X['Bandra Kurla'].iloc[i,:]).T.to_numpy())
+    error[i] = aqi['Bandra Kurla'][i] - ext[i]
+ 
+fig = plt.figure(figsize=(20,10))
+fig.suptitle('Model accuracy on Bandra Kurla AQI values', fontsize=25)
 plt.plot(x, ext, label = 'Predicted Value')
-plt.plot(x, aqi['Bandra'], label = 'Actual Value')
-plt.legend()
+plt.plot(x, aqi['Bandra Kurla'], label = 'Actual Value')
+plt.xlabel('Day no.', fontsize=20)
+plt.ylabel('Value', fontsize=20)
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
+plt.legend(prop={'size':21})
 
 
 #Measuring the change in the AQI with respective changes in the individual factors
@@ -665,10 +680,15 @@ print(factors)
 #Plotting change in AQI with respective 50% reduction of individual factors
 for k in areas:
     for j in aqi_new[k].keys():
-        plt.figure(figsize=(15,7.5))
-        plt.plot(x,aqi[k],'r')
-        plt.plot(x,aqi_new[k][j],'b')
-        plt.xlabel('When the '+j+' in '+k+' is reduced by 50%')
+        fig = plt.figure(figsize=(15,7.5))
+        fig.suptitle('Change in AQI of '+k+' with 50% reduction in '+j+' values', fontsize=20)
+        plt.plot(x,aqi[k],'r', label='Original AQI value')
+        plt.plot(x,aqi_new[k][j],'b', label='AQI value after change in factor')
+        plt.xlabel('Days', fontsize=20)
+        plt.ylabel('Value', fontsize=20)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+        plt.legend(prop={'size':16})
 
 #Printing out the result
 for k in areas:
